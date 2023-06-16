@@ -50,7 +50,7 @@ describe Panko::ArraySerializer do
       expect(Foo.all).to serialized_as(array_serializer_factory, [{"name" => foo.name,
                                                                    "address" => foo.address,
                                                                    "something" => "#{foo.name} #{foo.address}",
-                                                                   "context_fetch" => 6}])
+                                                                   "contextFetch" => 6}])
     end
   end
 

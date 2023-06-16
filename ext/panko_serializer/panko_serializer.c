@@ -9,13 +9,19 @@ static ID push_json_id;
 static ID pop_id;
 
 static ID to_a_id;
+static ID camelize_id;
+static ID lower_id;
 
 static ID object_id;
 static ID serialization_context_id;
 
 static VALUE SKIP = Qundef;
 
+#define camelizeLower(str) rb_funcall(str, camelize_id, 1, ID2SYM(lower_id))
+
 void write_value(VALUE str_writer, VALUE key, VALUE value, VALUE isJson) {
+  key = camelizeLower(key);
+
   if (isJson == Qtrue) {
     rb_funcall(str_writer, push_json_id, 2, value, key);
   } else {
@@ -97,6 +103,11 @@ void serialize_has_many_associations(VALUE object, VALUE str_writer,
 
 VALUE serialize_object(VALUE key, VALUE object, VALUE str_writer,
                        SerializationDescriptor descriptor) {
+
+  if (!NIL_P(key)) {
+    key = camelizeLower(key);
+  }
+
   sd_set_writer(descriptor, object);
 
   rb_funcall(str_writer, push_object_id, 1, key);
@@ -121,6 +132,10 @@ VALUE serialize_object(VALUE key, VALUE object, VALUE str_writer,
 VALUE serialize_objects(VALUE key, VALUE objects, VALUE str_writer,
                         SerializationDescriptor descriptor) {
   long i;
+
+  if (!NIL_P(key)) {
+    key = camelizeLower(key);
+  }
 
   rb_funcall(str_writer, push_array_id, 1, key);
 
@@ -160,6 +175,8 @@ void Init_panko_serializer() {
   to_a_id = rb_intern("to_a");
   object_id = rb_intern("@object");
   serialization_context_id = rb_intern("@serialization_context");
+  camelize_id = rb_intern("camelize");
+  lower_id = rb_intern("lower");
 
   VALUE mPanko = rb_define_module("Panko");
 
