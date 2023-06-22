@@ -3,6 +3,7 @@
 require "bundler/setup"
 require "panko_serializer"
 require "faker"
+require "debug"
 
 require_relative "models"
 

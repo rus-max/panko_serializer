@@ -132,7 +132,7 @@ describe Panko::Serializer do
       obj = Foo.create.reload
 
       expect(obj).to serialized_as(ObjectWithTimeSerializer,
-        "createdAt" => obj.created_at.as_json,
+        "created_at" => obj.created_at.as_json,
         "method" => obj.created_at.as_json)
     end
 
@@ -159,7 +159,7 @@ describe Panko::Serializer do
 
       foo = FooWithAliasesModel.create(full_name: Faker::Lorem.word, address: Faker::Lorem.word).reload
 
-      expect(foo).to serialized_as(FooWithArAliasesSerializer, "fullName" => foo.name, "address" => foo.address)
+      expect(foo).to serialized_as(FooWithArAliasesSerializer, "full_name" => foo.name, "address" => foo.address)
     end
 
     it "allows to alias attributes" do
@@ -171,7 +171,7 @@ describe Panko::Serializer do
 
       foo = Foo.create(name: Faker::Lorem.word, address: Faker::Lorem.word).reload
 
-      expect(foo).to serialized_as(FooWithAliasesSerializer, "fullName" => foo.name, "address" => foo.address)
+      expect(foo).to serialized_as(FooWithAliasesSerializer, "full_name" => foo.name, "address" => foo.address)
     end
 
     it "serializes null values" do
@@ -208,6 +208,8 @@ describe Panko::Serializer do
       class FooWithContextSerializer < Panko::Serializer
         attributes :name, :context_value
 
+        aliases context_value: :context_value
+
         def context_value
           context[:value]
         end
@@ -219,7 +221,7 @@ describe Panko::Serializer do
 
       expect(foo).to serialized_as(serializer_factory,
         "name" => foo.name,
-        "contextValue" => context[:value])
+        "context_value" => context[:value])
     end
   end
 
@@ -250,9 +252,9 @@ describe Panko::Serializer do
       foo_holder = FooHolder.create(name: Faker::Lorem.word, foo: foo).reload
 
       expect(foo_holder).to serialized_as(serializer_factory,
-        "scopeValue" => scope,
+        "scope_value" => scope,
         "foo" => {
-          "scopeValue" => scope
+          "scope_value" => scope
         })
     end
 
@@ -260,9 +262,9 @@ describe Panko::Serializer do
       foo = Foo.create(name: Faker::Lorem.word, address: Faker::Lorem.word).reload
       foo_holder = FooHolder.create(name: Faker::Lorem.word, foo: foo).reload
 
-      expect(foo_holder).to serialized_as(FooHolderWithScopeSerializer, "scopeValue" => nil,
+      expect(foo_holder).to serialized_as(FooHolderWithScopeSerializer, "scope_value" => nil,
         "foo" => {
-          "scopeValue" => nil
+          "scope_value" => nil
         })
     end
   end
@@ -365,7 +367,7 @@ describe Panko::Serializer do
       foo_holder = FooHolder.create(name: Faker::Lorem.word, foo: foo).reload
 
       expect(foo_holder).to serialized_as(FooHolderHasOneWithNameSerializer, "name" => foo_holder.name,
-        "myFoo" => {
+        "my_foo" => {
           "name" => foo.name,
           "address" => foo.address
         })
@@ -540,7 +542,7 @@ describe Panko::Serializer do
       foos_holder = FoosHolder.create(name: Faker::Lorem.word, foos: [foo1, foo2]).reload
 
       expect(foos_holder).to serialized_as(FoosHasManyHolderWithNameSerializer, "name" => foos_holder.name,
-        "myFoos" => [
+        "my_foos" => [
           {
             "name" => foo1.name,
             "address" => foo1.address
@@ -714,13 +716,13 @@ describe Panko::Serializer do
     context "with alias" do
       let(:serializer_class) do
         Class.new(Panko::Serializer) do
-          aliases({created_at: :createdAt})
+          aliases({created_at: :created_at})
         end
       end
 
-      it "has createdAt" do
+      it "has created_at" do
         expect(data).to serialized_as(serializer_class,
-          "createdAt" => created_at)
+          "created_at" => created_at)
       end
     end
 
@@ -735,9 +737,9 @@ describe Panko::Serializer do
         end
       end
 
-      it "has createdAt" do
+      it "has created_at" do
         expect(data).to serialized_as(serializer_class,
-          "createdAt" => created_at)
+          "created_at" => created_at)
       end
     end
   end

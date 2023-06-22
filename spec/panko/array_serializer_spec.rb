@@ -30,6 +30,8 @@ describe Panko::ArraySerializer do
       class TestSerializerWithMethodsSerializer < Panko::Serializer
         attributes :name, :address, :something, :context_fetch
 
+        aliases context_fetch: :contextFetch
+
         def something
           "#{object.name} #{object.address}"
         end

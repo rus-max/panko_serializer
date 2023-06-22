@@ -157,11 +157,11 @@ describe Panko::Response do
         {
           "foo" => {
             "name" => foo.name,
-            "contextValue" => context[:value]
+            "context_value" => context[:value]
           },
           "foos" => [{
             "name" => foo.name,
-            "contextValue" => context[:value]
+            "context_value" => context[:value]
           }]
         }}
     ])
